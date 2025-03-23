@@ -109,19 +109,35 @@
             text-align: left;
         }
 
-        #ranking {
-            display: flex;
-            justify-content: center;
+        #contact-form {
             margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .ranking-item {
+        #contact-form input,
+        #contact-form textarea {
+            width: 80%;
+            margin: 10px 0;
             padding: 10px;
-            background-color: #f8f9fa;
+            font-size: 16px;
+            border-radius: 8px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 5px;
-            text-align: center;
+        }
+
+        #contact-form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #contact-form button:hover {
+            background-color: #45a049;
         }
 
         .content {
@@ -155,8 +171,8 @@
             <div class="banner-text">Курс для продвинутых</div>
         </div>
 
-        <div class="banner" onclick="showContent('ranking')">
-            <div class="banner-text">Рейтинг спортсменов</div>
+        <div class="banner" onclick="showContent('contact')">
+            <div class="banner-text">Связаться с администратором</div>
         </div>
     </div>
 
@@ -205,39 +221,40 @@
     <div id="beginner" class="content">
         <h2>Курс для начинающих</h2>
         <p>Каждую неделю 30 минут плавания. Основы плавания и техника.</p>
+        <button onclick="buyCourse('beginner')">Купить курс</button>
     </div>
 
     <!-- Контент для курса среднего уровня -->
     <div id="intermediate" class="content">
         <h2>Курс для среднего уровня</h2>
         <p>Каждую неделю 1 час плавания. Усложнение упражнений и работа над техникой.</p>
+        <button onclick="buyCourse('intermediate')">Купить курс</button>
     </div>
 
     <!-- Контент для курса продвинутых -->
     <div id="advanced" class="content">
         <h2>Курс для продвинутых</h2>
         <p>Каждую неделю 1.5 часа плавания с интенсивными тренировками.</p>
+        <button onclick="buyCourse('advanced')">Купить курс</button>
     </div>
 
-    <!-- Контент для рейтинга -->
-    <div id="ranking" class="content">
-        <h2>Рейтинг спортсменов:</h2>
-        <div class="ranking-item">1. Спортсмен 1 - 100 очков</div>
-        <div class="ranking-item">2. Спортсмен 2 - 95 очков</div>
-        <div class="ranking-item">3. Спортсмен 3 - 90 очков</div>
-        <div class="ranking-item">4. Спортсмен 4 - 80 очков</div>
-        <div class="ranking-item">5. Ваше место: 6 - 60 очков</div>
+    <!-- Контент для формы связи с администратором -->
+    <div id="contact" class="content">
+        <h2>Связаться с администратором</h2>
+        <p>Если у вас есть вопросы, напишите нам. Мы всегда рады помочь!</p>
+        <div id="contact-form">
+            <input type="text" id="user-name" placeholder="Ваше имя" required>
+            <textarea id="user-message" placeholder="Ваше сообщение" required></textarea>
+            <button onclick="sendMessage()">Отправить сообщение</button>
+        </div>
     </div>
 
     <script>
         function showContent(page) {
-            // Скрываем все контенты
             let contentSections = document.querySelectorAll('.content');
             contentSections.forEach(section => {
                 section.classList.remove('active');
             });
-
-            // Показываем нужный контент
             document.getElementById(page).classList.add('active');
         }
 
@@ -252,6 +269,25 @@
 
         function submitWorkouts() {
             alert("Ваши тренировки были отправлены!");
+        }
+
+        function buyCourse(course) {
+            alert(`Вы приобрели курс: ${course}. Теперь получите доступ к ежемесячным тренировкам.`);
+            // Логика для добавления пользователя в чат после оплаты через Tribute
+        }
+
+        function sendMessage() {
+            const name = document.getElementById('user-name').value;
+            const message = document.getElementById('user-message').value;
+
+            if (!name || !message) {
+                alert('Пожалуйста, заполните все поля!');
+                return;
+            }
+
+            // Здесь можно отправить сообщение в Telegram администратору
+            alert(`Сообщение отправлено администратору @swimlifeby!\nИмя: ${name}\nСообщение: ${message}`);
+            // Например, через API Telegram Bot для отправки сообщений.
         }
     </script>
 
