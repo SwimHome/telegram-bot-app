@@ -98,11 +98,33 @@
             border-radius: 5px;
             margin: 5px 0;
         }
+
+        #trial-message {
+            display: none;
+            font-size: 20px;
+            margin-top: 20px;
+            color: #333;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #workout-list {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 
     <h1>Добро пожаловать в мини-игру Telegram!</h1>
+
+    <div id="trial-message">
+        <h2>Вы начали пробный период на неделю!</h2>
+        <p>Теперь вы можете выбрать тренировки, которые будут доступны в вашем пробном периоде. Пожалуйста, отметьте тренировки, которые вы хотите выполнить.</p>
+    </div>
 
     <div class="menu-container">
         <!-- Кнопка для пробного периода -->
@@ -175,9 +197,14 @@
         let userRank = 3;  // Предположим, что текущий пользователь находится на 3 месте.
 
         function openTrial() {
-            alert('Вы начали пробный период на неделю!');
-            // Показать тренировки
+            // Показываем сообщение о пробном периоде сверху
+            document.getElementById('trial-message').style.display = 'block';
+            
+            // Показать тренировки после пробного периода
             document.getElementById('workout-list').style.display = 'block';
+
+            // Скрыть меню
+            document.querySelector('.menu-container').style.display = 'none';
         }
 
         function markAsCompleted(workoutId) {
