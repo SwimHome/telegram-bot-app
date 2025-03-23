@@ -67,16 +67,26 @@
         }
 
         .workout-list {
-            display: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             margin-top: 20px;
-            text-align: left;
+            gap: 20px;
         }
 
         .workout-item {
             background-color: #e9ecef;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 5px 0;
+            padding: 20px;
+            border-radius: 15px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .workout-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         .workout-item.completed {
@@ -85,18 +95,6 @@
 
         .workout-item label {
             font-size: 18px;
-        }
-
-        .ranking {
-            margin-top: 30px;
-        }
-
-        .ranking-item {
-            padding: 10px;
-            background-color: #f8f9fa;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 5px 0;
         }
 
         #trial-message {
@@ -111,8 +109,27 @@
             text-align: left;
         }
 
-        #workout-list {
+        #ranking {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .ranking-item {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 5px;
+            text-align: center;
+        }
+
+        .content {
             display: none;
+        }
+
+        .active {
+            display: block;
         }
 
     </style>
@@ -121,94 +138,111 @@
 
     <h1>Добро пожаловать в мини-игру Telegram!</h1>
 
-    <div id="trial-message">
-        <h2>Вы начали пробный период на неделю!</h2>
-        <p>Теперь вы можете выбрать тренировки, которые будут доступны в вашем пробном периоде. Пожалуйста, отметьте тренировки, которые вы хотите выполнить.</p>
-    </div>
-
     <div class="menu-container">
-        <!-- Кнопка для пробного периода -->
-        <div class="banner" onclick="openTrial()">
+        <div class="banner" onclick="showContent('trial')">
             <div class="banner-text">Бесплатный пробный период</div>
         </div>
 
-        <!-- Кнопка для курса для начинающих -->
-        <div class="banner" onclick="openCourse('beginner')">
+        <div class="banner" onclick="showContent('beginner')">
             <div class="banner-text">Курс для начинающих</div>
         </div>
 
-        <!-- Кнопка для среднего уровня -->
-        <div class="banner" onclick="openCourse('intermediate')">
+        <div class="banner" onclick="showContent('intermediate')">
             <div class="banner-text">Курс для среднего уровня</div>
         </div>
 
-        <!-- Кнопка для продвинутых -->
-        <div class="banner" onclick="openCourse('advanced')">
+        <div class="banner" onclick="showContent('advanced')">
             <div class="banner-text">Курс для продвинутых</div>
         </div>
 
-        <!-- Кнопка для рейтинга -->
-        <div class="banner" onclick="openRanking()">
+        <div class="banner" onclick="showContent('ranking')">
             <div class="banner-text">Рейтинг спортсменов</div>
         </div>
     </div>
 
-    <div id="workout-list" class="workout-list">
-        <h2>Ваши тренировки:</h2>
-        <div id="workout-1" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(1)"> Тренировка 1: Плавание 30 минут (легкий темп)
-            </label>
+    <!-- Контент для пробного периода -->
+    <div id="trial" class="content">
+        <div id="trial-message">
+            <h2>Вы начали пробный период на неделю!</h2>
+            <p>Теперь вы можете выбрать тренировки, которые будут доступны в вашем пробном периоде. Пожалуйста, отметьте тренировки, которые вы хотите выполнить.</p>
         </div>
-        <div id="workout-2" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(2)"> Тренировка 2: Плавание 45 минут (средний темп)
-            </label>
+        <div class="workout-list">
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(1)"> Тренировка 1: Плавание 30 минут (легкий темп)
+                </label>
+            </div>
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(2)"> Тренировка 2: Плавание 45 минут (средний темп)
+                </label>
+            </div>
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(3)"> Тренировка 3: Плавание 30 минут (высокий темп)
+                </label>
+            </div>
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(4)"> Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)
+                </label>
+            </div>
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(5)"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
+                </label>
+            </div>
+            <div class="workout-item">
+                <label>
+                    <input type="checkbox" onclick="markAsCompleted(6)"> Тренировка 6: Плавание 2000 метров
+                </label>
+            </div>
+            <button onclick="submitWorkouts()">Отправить тренировки</button>
         </div>
-        <div id="workout-3" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(3)"> Тренировка 3: Плавание 30 минут (высокий темп)
-            </label>
-        </div>
-        <div id="workout-4" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(4)"> Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)
-            </label>
-        </div>
-        <div id="workout-5" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(5)"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
-            </label>
-        </div>
-        <div id="workout-6" class="workout-item">
-            <label>
-                <input type="checkbox" onclick="markAsCompleted(6)"> Тренировка 6: Плавание 2000 метров
-            </label>
-        </div>
-        <button onclick="submitWorkouts()">Отправить тренировки</button>
     </div>
 
-    <div id="ranking" class="ranking" style="display: none;">
+    <!-- Контент для курса начинающих -->
+    <div id="beginner" class="content">
+        <h2>Курс для начинающих</h2>
+        <p>Каждую неделю 30 минут плавания. Основы плавания и техника.</p>
+    </div>
+
+    <!-- Контент для курса среднего уровня -->
+    <div id="intermediate" class="content">
+        <h2>Курс для среднего уровня</h2>
+        <p>Каждую неделю 1 час плавания. Усложнение упражнений и работа над техникой.</p>
+    </div>
+
+    <!-- Контент для курса продвинутых -->
+    <div id="advanced" class="content">
+        <h2>Курс для продвинутых</h2>
+        <p>Каждую неделю 1.5 часа плавания с интенсивными тренировками.</p>
+    </div>
+
+    <!-- Контент для рейтинга -->
+    <div id="ranking" class="content">
         <h2>Рейтинг спортсменов:</h2>
-        <div id="ranking-list"></div>
+        <div class="ranking-item">1. Спортсмен 1 - 100 очков</div>
+        <div class="ranking-item">2. Спортсмен 2 - 95 очков</div>
+        <div class="ranking-item">3. Спортсмен 3 - 90 очков</div>
+        <div class="ranking-item">4. Спортсмен 4 - 80 очков</div>
+        <div class="ranking-item">5. Ваше место: 6 - 60 очков</div>
     </div>
 
     <script>
-        let userRank = 3;  // Предположим, что текущий пользователь находится на 3 месте.
+        function showContent(page) {
+            // Скрываем все контенты
+            let contentSections = document.querySelectorAll('.content');
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
 
-        function openTrial() {
-            // Показываем сообщение о пробном периоде сверху
-            document.getElementById('trial-message').style.display = 'block';
-            
-            // Показать тренировки после пробного периода
-            document.getElementById('workout-list').style.display = 'block';
-
-            // Скрыть меню
-            document.querySelector('.menu-container').style.display = 'none';
+            // Показываем нужный контент
+            document.getElementById(page).classList.add('active');
         }
 
         function markAsCompleted(workoutId) {
-            const workout = document.getElementById('workout-' + workoutId);
+            const workout = document.getElementsByClassName('workout-item')[workoutId - 1];
             if (workout.querySelector('input').checked) {
                 workout.classList.add('completed');
             } else {
@@ -217,79 +251,7 @@
         }
 
         function submitWorkouts() {
-            // Собираем выбранные тренировки
-            const selectedWorkouts = [];
-            for (let i = 1; i <= 6; i++) {
-                const workoutCheckbox = document.getElementById('workout-' + i).querySelector('input');
-                if (workoutCheckbox.checked) {
-                    selectedWorkouts.push(workoutCheckbox.parentElement.innerText.trim());
-                }
-            }
-
-            if (selectedWorkouts.length === 0) {
-                alert('Вы не выбрали тренировки!');
-                return;
-            }
-
-            // Отправить данные на сервер или в Telegram
-            sendWorkoutsToTelegram(selectedWorkouts);
-        }
-
-        function sendWorkoutsToTelegram(workouts) {
-            // Пример отправки данных на сервер для бота
-            fetch('https://yourserver.com/send_trainings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    user_id: 'USER_ID',  // Получите ID пользователя Telegram
-                    workouts: workouts
-                })
-            }).then(response => {
-                if (response.ok) {
-                    alert('Ваши тренировки были отправлены в Telegram!');
-                } else {
-                    alert('Что-то пошло не так. Попробуйте позже.');
-                }
-            });
-        }
-
-        function openCourse(level) {
-            let courseMessage = '';
-            if (level === 'beginner') {
-                courseMessage = 'Курс для начинающих: Понедельно: Плавание 30 минут.';
-            } else if (level === 'intermediate') {
-                courseMessage = 'Курс для среднего уровня: Понедельно: Плавание 1 час.';
-            } else if (level === 'advanced') {
-                courseMessage = 'Курс для продвинутых: Понедельно: Плавание 1.5 часа.';
-            }
-
-            alert(courseMessage);
-        }
-
-        function openRanking() {
-            alert('Смотрите рейтинг лучших спортсменов!');
-            // Пример вывода рейтинга
-            const rankingList = [
-                { name: 'Спортсмен 1', points: 100 },
-                { name: 'Спортсмен 2', points: 90 },
-                { name: 'Спортсмен 3', points: 85 },
-                { name: 'Спортсмен 4', points: 75 },
-                { name: 'Вы', points: 60 }
-            ];
-
-            const rankingContainer = document.getElementById('ranking-list');
-            rankingContainer.innerHTML = '';  // Очищаем контейнер рейтинга
-
-            rankingList.forEach((user, index) => {
-                const rankingItem = document.createElement('div');
-                rankingItem.className = 'ranking-item';
-                rankingItem.textContent = `${index + 1}. ${user.name} - ${user.points} очков`;
-                rankingContainer.appendChild(rankingItem);
-            });
-
-            document.getElementById('ranking').style.display = 'block';
+            alert("Ваши тренировки были отправлены!");
         }
     </script>
 
