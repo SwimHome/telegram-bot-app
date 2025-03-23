@@ -19,41 +19,42 @@
             font-size: 36px;
         }
 
+        /* Контейнер для кнопок */
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        /* Кнопки как квадратные баннеры с фоном */
         .banner {
             display: inline-block;
-            width: 80%;
+            width: 45%;
             margin: 10px;
             padding: 20px;
-            background-color: #4CAF50;
+            background-size: cover;
+            background-position: center;
             color: white;
             font-size: 20px;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            height: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .banner:hover {
-            background-color: #45a049;
             transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .game-container {
-            margin-top: 30px;
-        }
-
-        .menu-container {
-            margin-top: 50px;
-        }
-
-        .menu-container .banner {
-            width: 90%;
-        }
-
-        /* Дополнительный стиль для отображения баннеров на мобильных устройствах */
+        /* Стиль для адаптивных кнопок на мобильных устройствах */
         @media screen and (max-width: 768px) {
             .banner {
-                width: 95%;
+                width: 90%;
             }
         }
     </style>
@@ -62,16 +63,21 @@
 
     <h1>Добро пожаловать в мини-игру Telegram!</h1>
 
-    <div class="game-container">
-        <button class="banner" onclick="startGame()">Начать игру</button>
-    </div>
-
     <div class="menu-container">
-        <button class="banner" onclick="openTrial()">Бесплатный пробный период</button>
-        <button class="banner" onclick="openCourse('beginner')">Курс для начинающих</button>
-        <button class="banner" onclick="openCourse('intermediate')">Курс для среднего уровня</button>
-        <button class="banner" onclick="openCourse('advanced')">Курс для продвинутых</button>
-        <button class="banner" onclick="openRanking()">Рейтинг спортсменов</button>
+        <!-- Кнопка для пробного периода -->
+        <div class="banner" style="background-image: url('https://swimlife.by/images/Content/2024-12-25_225355.jpg');" onclick="openTrial()">Бесплатный пробный период</div>
+
+        <!-- Кнопка для курса для начинающих -->
+        <div class="banner" style="background-image: url('https://example.com/swimming2.jpg');" onclick="openCourse('beginner')">Курс для начинающих</div>
+
+        <!-- Кнопка для среднего уровня -->
+        <div class="banner" style="background-image: url('https://example.com/swimming3.jpg');" onclick="openCourse('intermediate')">Курс для среднего уровня</div>
+
+        <!-- Кнопка для продвинутых -->
+        <div class="banner" style="background-image: url('https://example.com/swimming4.jpg');" onclick="openCourse('advanced')">Курс для продвинутых</div>
+
+        <!-- Кнопка для рейтинга -->
+        <div class="banner" style="background-image: url('https://example.com/swimming5.jpg');" onclick="openRanking()">Рейтинг спортсменов</div>
     </div>
 
     <script>
@@ -80,11 +86,22 @@
             // Здесь код для игры
         }
 
+        // Функция для открытия пробного периода
         function openTrial() {
-            alert('Вам предоставлен бесплатный пробный период на неделю!');
-            // Тут будет код для пробного периода тренировок
+            alert('Вы начали пробный период на неделю!');
+            // Код для сохранения тренировки (например, добавление в систему)
+            saveTrialWorkouts(); 
         }
 
+        function saveTrialWorkouts() {
+            // Код для отправки тренировок пользователю через Telegram API
+            alert('Ваши тренировки на неделю были сохранены!');
+
+            // Например, тут можно отправить пользователю сообщение через Telegram API:
+            // bot.send_message(chat_id, "Ваши тренировки на неделю: Понедельно: Плавание 30 минут.");
+        }
+
+        // Функция для открытия курса в зависимости от уровня
         function openCourse(level) {
             let courseMessage = '';
             if (level === 'beginner') {
@@ -96,14 +113,16 @@
             }
 
             alert(courseMessage);
-            // Код для вывода расписания тренировок по дням
+            // Тут можно добавить код для отправки расписания тренировок
         }
 
+        // Функция для отображения рейтинга
         function openRanking() {
             alert('Смотрите рейтинг лучших спортсменов!');
-            // Код для отображения рейтинга спортсменов
+            // Код для отображения рейтинга
         }
     </script>
     
 </body>
 </html>
+
