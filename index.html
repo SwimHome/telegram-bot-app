@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мини-приложение Telegram</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      padding: 20px;
-      text-align: center;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .game-container {
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Добро пожаловать в курс плавания!</h1>
-  <p>Нажмите кнопку ниже, чтобы начать курс.</p>
-  <button onclick="startCourse()">Начать курс</button>
+    <h1>Добро пожаловать в мини-игру Telegram!</h1>
+    <div class="game-container">
+        <button onclick="startGame()">Начать игру</button>
+    </div>
 
-  <script>
-    const tgram = Telegram.WebApp;
-    tgram.expand();
-
-    function startCourse() {
-      alert('Курс плавания начался!');
-      // Здесь можно добавить логику для старта курса
-    }
-  </script>
+    <script>
+        function startGame() {
+            alert('Игра началась!');
+            // Здесь код для игры
+        }
+    </script>
 </body>
 </html>
-
-
