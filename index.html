@@ -31,9 +31,17 @@
         .progress-bar {
             width: 0;
             height: 30px;
-            background-color: #4CAF50;
+            background-color: #FFDF00; /* жемчужно-желтый */
             border-radius: 25px;
             transition: width 0.5s;
+        }
+
+        .progress-bar-background {
+            width: 100%;
+            height: 30px;
+            background-color: #d0d0d0;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .level-info {
@@ -140,6 +148,45 @@
             display: block;
         }
 
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -148,7 +195,9 @@
 
     <!-- Шкала прогресса -->
     <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-bar-background">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
     </div>
     <div class="level-info" id="level-info">Уровень: Начальный | Опыт: 0 / 50</div>
 
@@ -209,83 +258,88 @@
     <!-- Контент для курса начинающих -->
     <div id="beginner" class="content">
         <h2>Курс для начинающих</h2>
-        <p>Каждую неделю 30 минут плавания. Основы плавания и техника.</p>
-        <button onclick="buyCourse('beginner')">Купить курс</button>
+        <table>
+            <tr>
+                <th>Тренировка</th>
+                <th>Описание</th>
+                <th>Отправить в Telegram</th>
+            </tr>
+            <tr>
+                <td>Тренировка 1</td>
+                <td>Плавание 30 минут (легкий темп)</td>
+                <td><button onclick="sendToTelegram('Тренировка 1: Плавание 30 минут (легкий темп)')">Отправить</button></td>
+            </tr>
+            <tr>
+                <td>Тренировка 2</td>
+                <td>Плавание 45 минут (средний темп)</td>
+                <td><button onclick="sendToTelegram('Тренировка 2: Плавание 45 минут (средний темп)')">Отправить</button></td>
+            </tr>
+            <!-- Дополнительные тренировки... -->
+        </table>
+        <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
-    <!-- Контент для курса среднего уровня -->
+    <!-- Контент для среднего уровня -->
     <div id="intermediate" class="content">
-        <h2>Курс для среднего уровня</h2>
-        <p>Каждую неделю 1 час плавания. Усложнение упражнений и работа над техникой.</p>
-        <button onclick="buyCourse('intermediate')">Купить курс</button>
+        <!-- Похожие тренировки для среднего уровня -->
+        <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
-    <!-- Контент для курса продвинутых -->
+    <!-- Контент для продвинутого уровня -->
     <div id="advanced" class="content">
-        <h2>Курс для продвинутых</h2>
-        <p>Каждую неделю 1.5 часа плавания с интенсивными тренировками.</p>
-        <button onclick="buyCourse('advanced')">Купить курс</button>
+        <!-- Похожие тренировки для продвинутого уровня -->
+        <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
     <script>
         let userExperience = 0;
         const experienceToNextLevel = 50;
 
-        function showContent(page) {
-            let contentSections = document.querySelectorAll('.content');
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(page).classList.add('active');
+        function showContent(contentId) {
+            // Скрыть все контенты
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Показать выбранный контент
+            const content = document.getElementById(contentId);
+            content.classList.add('active');
         }
 
         function markAsCompleted(workoutId) {
-            const workout = document.getElementsByClassName('workout-item')[workoutId - 1];
-            if (workout.querySelector('input').checked) {
-                workout.classList.add('completed');
-            } else {
-                workout.classList.remove('completed');
-            }
+            const workout = document.querySelector(`#workout-${workoutId}`);
+            workout.classList.toggle('completed');
         }
 
+        function submitWorkouts() {
+            // Здесь можно добавить отправку данных в Telegram
+            alert('Ваши тренировки отправлены!');
+        }
+
+        function sendToTelegram(message) {
+            // Симуляция отправки тренировки в Telegram
+            alert(`Отправлено в Telegram: ${message}`);
+        }
+
+        function goBack() {
+            // Возвращаемся на главную страницу
+            window.location.reload();
+        }
+
+        // Инициализация
         function updateProgress() {
             const progressBar = document.getElementById('progress-bar');
             const levelInfo = document.getElementById('level-info');
-
             const progress = Math.min((userExperience / experienceToNextLevel) * 100, 100);
             progressBar.style.width = progress + '%';
             levelInfo.textContent = `Уровень: ${getLevel()} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
         }
 
-        function buyCourse(course) {
-            let experiencePoints = 0;
-            if (course === 'beginner') {
-                experiencePoints = 10;
-            } else if (course === 'intermediate') {
-                experiencePoints = 20;
-            } else if (course === 'advanced') {
-                experiencePoints = 30;
-            }
-
-            userExperience += experiencePoints;
-            updateProgress();
-        }
-
         function getLevel() {
-            if (userExperience >= 50) {
-                return 'Профи';
-            } else if (userExperience >= 30) {
-                return 'Продвинутый';
-            } else if (userExperience >= 10) {
-                return 'Начальный';
-            } else {
-                return 'Новичок';
-            }
+            if (userExperience >= 500) return 'Профи';
+            if (userExperience >= 400) return 'Продвинутый';
+            if (userExperience >= 300) return 'Начальный';
+            return 'Новичок';
         }
-
-        // Изначальная настройка
-        updateProgress();
     </script>
-
 </body>
 </html>
