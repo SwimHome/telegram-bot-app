@@ -78,6 +78,26 @@
             border-radius: 8px;
             margin: 5px 0;
         }
+
+        .workout-item.completed {
+            background-color: #d4edda;
+        }
+
+        .workout-item label {
+            font-size: 18px;
+        }
+
+        .ranking {
+            margin-top: 30px;
+        }
+
+        .ranking-item {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -115,43 +135,64 @@
         <h2>Ваши тренировки:</h2>
         <div id="workout-1" class="workout-item">
             <label>
-                <input type="checkbox"> Тренировка 1: Плавание 30 минут (легкий темп)
+                <input type="checkbox" onclick="markAsCompleted(1)"> Тренировка 1: Плавание 30 минут (легкий темп)
             </label>
         </div>
         <div id="workout-2" class="workout-item">
             <label>
-                <input type="checkbox"> Тренировка 2: Плавание 45 минут (средний темп)
+                <input type="checkbox" onclick="markAsCompleted(2)"> Тренировка 2: Плавание 45 минут (средний темп)
             </label>
         </div>
         <div id="workout-3" class="workout-item">
             <label>
-                <input type="checkbox"> Тренировка 3: Плавание 30 минут (высокий темп)
+                <input type="checkbox" onclick="markAsCompleted(3)"> Тренировка 3: Плавание 30 минут (высокий темп)
             </label>
         </div>
         <div id="workout-4" class="workout-item">
             <label>
-                <input type="checkbox"> Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)
+                <input type="checkbox" onclick="markAsCompleted(4)"> Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)
             </label>
         </div>
         <div id="workout-5" class="workout-item">
             <label>
-                <input type="checkbox"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
+                <input type="checkbox" onclick="markAsCompleted(5)"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
+            </label>
+        </div>
+        <div id="workout-6" class="workout-item">
+            <label>
+                <input type="checkbox" onclick="markAsCompleted(6)"> Тренировка 6: Плавание 2000 метров
             </label>
         </div>
         <button onclick="submitWorkouts()">Отправить тренировки</button>
     </div>
 
+    <div id="ranking" class="ranking" style="display: none;">
+        <h2>Рейтинг спортсменов:</h2>
+        <div id="ranking-list"></div>
+    </div>
+
     <script>
+        let userRank = 3;  // Предположим, что текущий пользователь находится на 3 месте.
+
         function openTrial() {
             alert('Вы начали пробный период на неделю!');
             // Показать тренировки
             document.getElementById('workout-list').style.display = 'block';
         }
 
+        function markAsCompleted(workoutId) {
+            const workout = document.getElementById('workout-' + workoutId);
+            if (workout.querySelector('input').checked) {
+                workout.classList.add('completed');
+            } else {
+                workout.classList.remove('completed');
+            }
+        }
+
         function submitWorkouts() {
             // Собираем выбранные тренировки
             const selectedWorkouts = [];
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 6; i++) {
                 const workoutCheckbox = document.getElementById('workout-' + i).querySelector('input');
                 if (workoutCheckbox.checked) {
                     selectedWorkouts.push(workoutCheckbox.parentElement.innerText.trim());
@@ -202,6 +243,26 @@
 
         function openRanking() {
             alert('Смотрите рейтинг лучших спортсменов!');
+            // Пример вывода рейтинга
+            const rankingList = [
+                { name: 'Спортсмен 1', points: 100 },
+                { name: 'Спортсмен 2', points: 90 },
+                { name: 'Спортсмен 3', points: 85 },
+                { name: 'Спортсмен 4', points: 75 },
+                { name: 'Вы', points: 60 }
+            ];
+
+            const rankingContainer = document.getElementById('ranking-list');
+            rankingContainer.innerHTML = '';  // Очищаем контейнер рейтинга
+
+            rankingList.forEach((user, index) => {
+                const rankingItem = document.createElement('div');
+                rankingItem.className = 'ranking-item';
+                rankingItem.textContent = `${index + 1}. ${user.name} - ${user.points} очков`;
+                rankingContainer.appendChild(rankingItem);
+            });
+
+            document.getElementById('ranking').style.display = 'block';
         }
     </script>
 
