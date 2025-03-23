@@ -187,6 +187,44 @@
         .back-button:hover {
             background-color: #45a049;
         }
+
+        .level-up-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .level-up-popup .popup-content {
+            text-align: center;
+            padding: 30px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .level-up-popup button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .level-up-popup button:hover {
+            background-color: #45a049;
+        }
+
+        .menu-container {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -291,6 +329,14 @@
         <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
+    <!-- Окно поздравления при достижении нового уровня -->
+    <div class="level-up-popup" id="level-up-popup">
+        <div class="popup-content">
+            <h2>Поздравляем! Вы достигли нового уровня!</h2>
+            <button onclick="closeLevelUpPopup()">Ура!</button>
+        </div>
+    </div>
+
     <script>
         let userExperience = 0;
         const experienceToNextLevel = 50;
@@ -332,6 +378,11 @@
             const progress = Math.min((userExperience / experienceToNextLevel) * 100, 100);
             progressBar.style.width = progress + '%';
             levelInfo.textContent = `Уровень: ${getLevel()} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
+
+            // Поздравление при достижении нового уровня
+            if (userExperience >= experienceToNextLevel) {
+                showLevelUpPopup();
+            }
         }
 
         function getLevel() {
@@ -340,6 +391,18 @@
             if (userExperience >= 300) return 'Начальный';
             return 'Новичок';
         }
+
+        function showLevelUpPopup() {
+            const popup = document.getElementById('level-up-popup');
+            popup.style.display = 'flex';
+        }
+
+        function closeLevelUpPopup() {
+            const popup = document.getElementById('level-up-popup');
+            popup.style.display = 'none';
+        }
+
+        updateProgress();
     </script>
 </body>
 </html>
