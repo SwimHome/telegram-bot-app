@@ -65,6 +65,19 @@
                 width: 90%;
             }
         }
+
+        .workout-list {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .workout-item {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -98,30 +111,64 @@
         </div>
     </div>
 
-    <script>
-        function startGame() {
-            alert('Игра началась!');
-            // Здесь код для игры
-        }
+    <div id="workout-list" class="workout-list">
+        <h2>Ваши тренировки:</h2>
+        <div id="workout-1" class="workout-item">
+            <label>
+                <input type="checkbox"> Тренировка 1: Плавание 30 минут (легкий темп)
+            </label>
+        </div>
+        <div id="workout-2" class="workout-item">
+            <label>
+                <input type="checkbox"> Тренировка 2: Плавание 45 минут (средний темп)
+            </label>
+        </div>
+        <div id="workout-3" class="workout-item">
+            <label>
+                <input type="checkbox"> Тренировка 3: Плавание 30 минут (высокий темп)
+            </label>
+        </div>
+        <div id="workout-4" class="workout-item">
+            <label>
+                <input type="checkbox"> Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)
+            </label>
+        </div>
+        <div id="workout-5" class="workout-item">
+            <label>
+                <input type="checkbox"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
+            </label>
+        </div>
+        <button onclick="submitWorkouts()">Отправить тренировки</button>
+    </div>
 
-        // Функция для открытия пробного периода
+    <script>
         function openTrial() {
             alert('Вы начали пробный период на неделю!');
-            // Код для сохранения тренировки и отправки их в Telegram через сервер
-            sendFreeWorkouts();
+            // Показать тренировки
+            document.getElementById('workout-list').style.display = 'block';
         }
 
-        function sendFreeWorkouts() {
-            // 5 бесплатных тренировок на воде
-            const workouts = [
-                'Тренировка 1: Плавание 30 минут (легкий темп)',
-                'Тренировка 2: Плавание 45 минут (средний темп)',
-                'Тренировка 3: Плавание 30 минут (высокий темп)',
-                'Тренировка 4: Плавание 1 час (плавание с интервальными нагрузками)',
-                'Тренировка 5: Плавание 1 час (разнообразные стили и техника)'
-            ];
+        function submitWorkouts() {
+            // Собираем выбранные тренировки
+            const selectedWorkouts = [];
+            for (let i = 1; i <= 5; i++) {
+                const workoutCheckbox = document.getElementById('workout-' + i).querySelector('input');
+                if (workoutCheckbox.checked) {
+                    selectedWorkouts.push(workoutCheckbox.parentElement.innerText.trim());
+                }
+            }
 
-            // Отправка данных на сервер бота
+            if (selectedWorkouts.length === 0) {
+                alert('Вы не выбрали тренировки!');
+                return;
+            }
+
+            // Отправить данные на сервер или в Telegram
+            sendWorkoutsToTelegram(selectedWorkouts);
+        }
+
+        function sendWorkoutsToTelegram(workouts) {
+            // Пример отправки данных на сервер для бота
             fetch('https://yourserver.com/send_trainings', {
                 method: 'POST',
                 headers: {
@@ -133,14 +180,13 @@
                 })
             }).then(response => {
                 if (response.ok) {
-                    alert('Ваши тренировки на неделю были отправлены в Telegram!');
+                    alert('Ваши тренировки были отправлены в Telegram!');
                 } else {
                     alert('Что-то пошло не так. Попробуйте позже.');
                 }
             });
         }
 
-        // Функция для открытия курса в зависимости от уровня
         function openCourse(level) {
             let courseMessage = '';
             if (level === 'beginner') {
@@ -152,13 +198,10 @@
             }
 
             alert(courseMessage);
-            // Тут можно добавить код для отправки расписания тренировок
         }
 
-        // Функция для отображения рейтинга
         function openRanking() {
             alert('Смотрите рейтинг лучших спортсменов!');
-            // Код для отображения рейтинга
         }
     </script>
 
