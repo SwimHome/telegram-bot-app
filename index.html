@@ -222,6 +222,22 @@
             background-color: #45a049;
         }
 
+        .language-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .language-button:hover {
+            background-color: #45a049;
+        }
+
         .menu-container {
             margin-top: 30px;
         }
@@ -229,7 +245,9 @@
 </head>
 <body>
 
-    <h1>Добро пожаловать в мини-игру Telegram!</h1>
+    <h1 id="greeting">Добро пожаловать в мини-игру Telegram!</h1>
+
+    <button class="language-button" onclick="toggleLanguage()">EN/RU</button>
 
     <!-- Шкала прогресса -->
     <div class="progress-container">
@@ -244,7 +262,7 @@
             <div class="banner-text">Бесплатный пробный период</div>
         </div>
 
-        <div class="banner" onclick="showContent('beginner')">
+        <div class="banner" onclick="showPurchaseMenu()">
             <div class="banner-text">Курс для начинающих</div>
         </div>
 
@@ -296,36 +314,21 @@
     <!-- Контент для курса начинающих -->
     <div id="beginner" class="content">
         <h2>Курс для начинающих</h2>
-        <table>
-            <tr>
-                <th>Тренировка</th>
-                <th>Описание</th>
-                <th>Отправить в Telegram</th>
-            </tr>
-            <tr>
-                <td>Тренировка 1</td>
-                <td>Плавание 30 минут (легкий темп)</td>
-                <td><button onclick="sendToTelegram('Тренировка 1: Плавание 30 минут (легкий темп)')">Отправить</button></td>
-            </tr>
-            <tr>
-                <td>Тренировка 2</td>
-                <td>Плавание 45 минут (средний темп)</td>
-                <td><button onclick="sendToTelegram('Тренировка 2: Плавание 45 минут (средний темп)')">Отправить</button></td>
-            </tr>
-            <!-- Дополнительные тренировки... -->
-        </table>
+        <button onclick="purchaseCourse()">Купить курс через бота Tribute</button>
         <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
     <!-- Контент для среднего уровня -->
     <div id="intermediate" class="content">
-        <!-- Похожие тренировки для среднего уровня -->
+        <h2>Курс для среднего уровня</h2>
+        <button onclick="purchaseCourse()">Купить курс через бота Tribute</button>
         <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
     <!-- Контент для продвинутого уровня -->
     <div id="advanced" class="content">
-        <!-- Похожие тренировки для продвинутого уровня -->
+        <h2>Курс для продвинутых</h2>
+        <button onclick="purchaseCourse()">Купить курс через бота Tribute</button>
         <button class="back-button" onclick="goBack()">Назад</button>
     </div>
 
@@ -342,13 +345,22 @@
         const experienceToNextLevel = 50;
 
         function showContent(contentId) {
-            // Скрыть все контенты
             const contents = document.querySelectorAll('.content');
             contents.forEach(content => content.classList.remove('active'));
-
-            // Показать выбранный контент
             const content = document.getElementById(contentId);
             content.classList.add('active');
+        }
+
+        function showPurchaseMenu() {
+            // Здесь можно вызвать логику для открытия меню покупки через бота Tribute
+            alert("Открытие меню покупки через бота Tribute");
+            // Пример: Вставьте сюда ссылку на бота или диалоговое окно бота
+        }
+
+        function purchaseCourse() {
+            alert("Вы купили курс! Теперь вы можете начать тренировки.");
+            userExperience += 50; // Накапливаем опыт
+            updateProgress();
         }
 
         function markAsCompleted(workoutId) {
@@ -357,21 +369,30 @@
         }
 
         function submitWorkouts() {
-            // Здесь можно добавить отправку данных в Telegram
             alert('Ваши тренировки отправлены!');
         }
 
         function sendToTelegram(message) {
-            // Симуляция отправки тренировки в Telegram
             alert(`Отправлено в Telegram: ${message}`);
         }
 
         function goBack() {
-            // Возвращаемся на главную страницу
             window.location.reload();
         }
 
-        // Инициализация
+        function toggleLanguage() {
+            const greeting = document.getElementById('greeting');
+            const langButton = document.querySelector('.language-button');
+
+            if (greeting.innerText === "Добро пожаловать в мини-игру Telegram!") {
+                greeting.innerText = "Welcome to the Telegram mini-game!";
+                langButton.innerText = "RU/EN";
+            } else {
+                greeting.innerText = "Добро пожаловать в мини-игру Telegram!";
+                langButton.innerText = "EN/RU";
+            }
+        }
+
         function updateProgress() {
             const progressBar = document.getElementById('progress-bar');
             const levelInfo = document.getElementById('level-info');
@@ -379,17 +400,16 @@
             progressBar.style.width = progress + '%';
             levelInfo.textContent = `Уровень: ${getLevel()} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
 
-            // Поздравление при достижении нового уровня
             if (userExperience >= experienceToNextLevel) {
                 showLevelUpPopup();
             }
         }
 
         function getLevel() {
-            if (userExperience >= 500) return 'Профи';
-            if (userExperience >= 400) return 'Продвинутый';
-            if (userExperience >= 300) return 'Начальный';
-            return 'Новичок';
+            if (userExperience >= experienceToNextLevel) {
+                return "Следующий";
+            }
+            return "Начальный";
         }
 
         function showLevelUpPopup() {
@@ -402,7 +422,9 @@
             popup.style.display = 'none';
         }
 
+        // Initial call to update the progress bar
         updateProgress();
     </script>
+
 </body>
 </html>
