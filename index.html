@@ -19,6 +19,29 @@
             font-size: 36px;
         }
 
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 25px;
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            border-radius: 25px;
+            transition: width 0.5s;
+        }
+
+        .level-info {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+
         .menu-container {
             display: flex;
             flex-wrap: wrap;
@@ -109,37 +132,6 @@
             text-align: left;
         }
 
-        #contact-form {
-            margin-top: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #contact-form input,
-        #contact-form textarea {
-            width: 80%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        #contact-form button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        #contact-form button:hover {
-            background-color: #45a049;
-        }
-
         .content {
             display: none;
         }
@@ -153,6 +145,12 @@
 <body>
 
     <h1>Добро пожаловать в мини-игру Telegram!</h1>
+
+    <!-- Шкала прогресса -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="level-info" id="level-info">Уровень: Начальный | Опыт: 0 / 50</div>
 
     <div class="menu-container">
         <div class="banner" onclick="showContent('trial')">
@@ -169,10 +167,6 @@
 
         <div class="banner" onclick="showContent('advanced')">
             <div class="banner-text">Курс для продвинутых</div>
-        </div>
-
-        <div class="banner" onclick="showContent('contact')">
-            <div class="banner-text">Связаться с администратором</div>
         </div>
     </div>
 
@@ -208,11 +202,6 @@
                     <input type="checkbox" onclick="markAsCompleted(5)"> Тренировка 5: Плавание 1 час (разнообразные стили и техника)
                 </label>
             </div>
-            <div class="workout-item">
-                <label>
-                    <input type="checkbox" onclick="markAsCompleted(6)"> Тренировка 6: Плавание 2000 метров
-                </label>
-            </div>
             <button onclick="submitWorkouts()">Отправить тренировки</button>
         </div>
     </div>
@@ -238,18 +227,10 @@
         <button onclick="buyCourse('advanced')">Купить курс</button>
     </div>
 
-    <!-- Контент для формы связи с администратором -->
-    <div id="contact" class="content">
-        <h2>Связаться с администратором</h2>
-        <p>Если у вас есть вопросы, напишите нам. Мы всегда рады помочь!</p>
-        <div id="contact-form">
-            <input type="text" id="user-name" placeholder="Ваше имя" required>
-            <textarea id="user-message" placeholder="Ваше сообщение" required></textarea>
-            <button onclick="sendMessage()">Отправить сообщение</button>
-        </div>
-    </div>
-
     <script>
+        let userExperience = 0;
+        const experienceToNextLevel = 50;
+
         function showContent(page) {
             let contentSections = document.querySelectorAll('.content');
             contentSections.forEach(section => {
@@ -267,28 +248,43 @@
             }
         }
 
-        function submitWorkouts() {
-            alert("Ваши тренировки были отправлены!");
+        function updateProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            const levelInfo = document.getElementById('level-info');
+
+            const progress = Math.min((userExperience / experienceToNextLevel) * 100, 100);
+            progressBar.style.width = progress + '%';
+            levelInfo.textContent = `Уровень: ${getLevel()} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
         }
 
         function buyCourse(course) {
-            alert(`Вы приобрели курс: ${course}. Теперь получите доступ к ежемесячным тренировкам.`);
-            // Логика для добавления пользователя в чат после оплаты через Tribute
-        }
-
-        function sendMessage() {
-            const name = document.getElementById('user-name').value;
-            const message = document.getElementById('user-message').value;
-
-            if (!name || !message) {
-                alert('Пожалуйста, заполните все поля!');
-                return;
+            let experiencePoints = 0;
+            if (course === 'beginner') {
+                experiencePoints = 10;
+            } else if (course === 'intermediate') {
+                experiencePoints = 20;
+            } else if (course === 'advanced') {
+                experiencePoints = 30;
             }
 
-            // Здесь можно отправить сообщение в Telegram администратору
-            alert(`Сообщение отправлено администратору @swimlifeby!\nИмя: ${name}\nСообщение: ${message}`);
-            // Например, через API Telegram Bot для отправки сообщений.
+            userExperience += experiencePoints;
+            updateProgress();
         }
+
+        function getLevel() {
+            if (userExperience >= 50) {
+                return 'Профи';
+            } else if (userExperience >= 30) {
+                return 'Продвинутый';
+            } else if (userExperience >= 10) {
+                return 'Начальный';
+            } else {
+                return 'Новичок';
+            }
+        }
+
+        // Изначальная настройка
+        updateProgress();
     </script>
 
 </body>
