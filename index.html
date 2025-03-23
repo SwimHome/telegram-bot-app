@@ -245,7 +245,7 @@
 </head>
 <body>
 
-    <h1 id="greeting">Добро пожаловать в мини-игру Telegram!</h1>
+    <h1 id="greeting">Пора начать тренировки и стать мастером плавания!</h1>
 
     <button class="language-button" onclick="toggleLanguage()">EN/RU</button>
 
@@ -255,7 +255,7 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
-    <div class="level-info" id="level-info">Уровень: Начальный | Опыт: 0 / 50</div>
+    <div class="level-info" id="level-info">Уровень: 1 | Опыт: 0 / 50</div>
 
     <div class="menu-container">
         <div class="banner" onclick="showContent('trial')">
@@ -343,6 +343,7 @@
     <script>
         let userExperience = 0;
         const experienceToNextLevel = 50;
+        let userLevel = 1;
 
         function showContent(contentId) {
             const contents = document.querySelectorAll('.content');
@@ -360,6 +361,7 @@
         function purchaseCourse() {
             alert("Вы купили курс! Теперь вы можете начать тренировки.");
             userExperience += 50; // Накапливаем опыт
+            checkLevelUp();
             updateProgress();
         }
 
@@ -372,44 +374,74 @@
             alert('Ваши тренировки отправлены!');
         }
 
-        function sendToTelegram(message) {
-            alert(`Отправлено в Telegram: ${message}`);
-        }
-
         function goBack() {
             window.location.reload();
         }
 
         function toggleLanguage() {
-            const greeting = document.getElementById('greeting');
-            const langButton = document.querySelector('.language-button');
+            const languageTexts = {
+                ru: {
+                    greeting: "Пора начать тренировки и стать мастером плавания!",
+                    trialMessage: "Вы начали пробный период на неделю!",
+                    beginnerCourse: "Курс для начинающих",
+                    intermediateCourse: "Курс для среднего уровня",
+                    advancedCourse: "Курс для продвинутых",
+                    back: "Назад",
+                    levelUp: "Поздравляем! Вы достигли нового уровня!",
+                    purchaseButton: "Купить курс через бота Tribute",
+                    submitButton: "Отправить тренировки"
+                },
+                en: {
+                    greeting: "It's time to start training and become a swimming master!",
+                    trialMessage: "You started the 7-day free trial period!",
+                    beginnerCourse: "Beginner Course",
+                    intermediateCourse: "Intermediate Course",
+                    advancedCourse: "Advanced Course",
+                    back: "Back",
+                    levelUp: "Congratulations! You've reached a new level!",
+                    purchaseButton: "Buy course via Tribute bot",
+                    submitButton: "Submit workouts"
+                }
+            };
+            
+            const currentLanguage = document.documentElement.lang === 'en' ? 'en' : 'ru';
+            const newLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+            document.documentElement.lang = newLanguage;
 
-            if (greeting.innerText === "Добро пожаловать в мини-игру Telegram!") {
-                greeting.innerText = "Welcome to the Telegram mini-game!";
-                langButton.innerText = "RU/EN";
-            } else {
-                greeting.innerText = "Добро пожаловать в мини-игру Telegram!";
-                langButton.innerText = "EN/RU";
-            }
+            const texts = languageTexts[newLanguage];
+
+            // Обновляем текст на странице
+            document.getElementById('greeting').textContent = texts.greeting;
+            document.getElementById('trial-message').textContent = texts.trialMessage;
+            document.querySelectorAll('.back-button').forEach(button => button.textContent = texts.back);
+            document.querySelectorAll('.banner-text').forEach((element, index) => {
+                switch(index) {
+                    case 0: element.textContent = texts.beginnerCourse; break;
+                    case 1: element.textContent = texts.intermediateCourse; break;
+                    case 2: element.textContent = texts.advancedCourse; break;
+                }
+            });
+
+            document.querySelectorAll('.workout-item label').forEach(label => {
+                label.querySelector('span').textContent = texts.submitButton;
+            });
         }
 
-        function updateProgress() {
-            const progressBar = document.getElementById('progress-bar');
-            const levelInfo = document.getElementById('level-info');
-            const progress = Math.min((userExperience / experienceToNextLevel) * 100, 100);
-            progressBar.style.width = progress + '%';
-            levelInfo.textContent = `Уровень: ${getLevel()} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
-
+        function checkLevelUp() {
             if (userExperience >= experienceToNextLevel) {
+                userLevel++;
+                if (userLevel > 10) userLevel = 10; // Максимум 10 уровень
                 showLevelUpPopup();
             }
         }
 
-        function getLevel() {
-            if (userExperience >= experienceToNextLevel) {
-                return "Следующий";
-            }
-            return "Начальный";
+        function updateProgress() {
+            const progressBar = document.getElementById("progress-bar");
+            const progressPercentage = (userExperience / experienceToNextLevel) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+
+            const levelInfo = document.getElementById("level-info");
+            levelInfo.textContent = `Уровень: ${userLevel} | Опыт: ${userExperience} / ${experienceToNextLevel}`;
         }
 
         function showLevelUpPopup() {
@@ -422,9 +454,8 @@
             popup.style.display = 'none';
         }
 
-        // Initial call to update the progress bar
+        // Начальный вызов обновления прогресса
         updateProgress();
     </script>
-
 </body>
 </html>
