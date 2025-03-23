@@ -3,27 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini Game</title>
+    <title>Мини-игра и Курсы по Плаванию</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
         }
-        .game-container {
-            margin-top: 50px;
+        .button {
+            padding: 15px 25px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .submenu {
+            display: none;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .submenu button {
+            background-color: #ff9800;
+        }
+        .profile-section {
+            margin-top: 30px;
+        }
+        .rating-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .rating-table th, .rating-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .rating-table th {
+            background-color: #4CAF50;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в мини-игру Telegram!</h1>
-    <div class="game-container">
-        <button onclick="startGame()">Начать игру</button>
+    <h1>Добро пожаловать в систему тренировок по плаванию!</h1>
+    
+    <div class="menu">
+        <button class="button" onclick="toggleSubmenu('trial')">Бесплатный пробный период</button>
+        <div class="submenu" id="trial">
+            <button class="button" onclick="startTrial()">Начать пробный период</button>
+            <div id="trialProgram" style="display:none;">
+                <h2>Пробный период — неделя тренировок:</h2>
+                <ul>
+                    <li>Понедельник: 30 минут плавания</li>
+                    <li>Вторник: 45 минут кардио + растяжка</li>
+                    <li>Среда: 60 минут плавания + техника</li>
+                    <li>Четверг: 30 минут плавания + интервальные тренировки</li>
+                    <li>Пятница: 45 минут кардио + растяжка</li>
+                    <li>Суббота: 60 минут плавания + техника</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="button" onclick="toggleSubmenu('beginner')">Курсы для новичков</button>
+        <div class="submenu" id="beginner">
+            <button class="button" onclick="startBeginnerCourse()">Курс новичков</button>
+            <div id="beginnerProgram" style="display:none;">
+                <h2>Курс для новичков — 4 недели:</h2>
+                <ul>
+                    <li>Понедельник: 20 минут плавания + техника дыхания</li>
+                    <li>Вторник: 30 минут кардио + растяжка</li>
+                    <li>Среда: 40 минут плавания + плавание на спине</li>
+                    <li>Четверг: 20 минут плавания + улучшение плавания на груди</li>
+                    <li>Пятница: 30 минут кардио + растяжка</li>
+                    <li>Суббота: 40 минут плавания + техника</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="button" onclick="toggleSubmenu('intermediate')">Курсы для среднего уровня</button>
+        <div class="submenu" id="intermediate">
+            <button class="button" onclick="startIntermediateCourse()">Курс для среднего уровня</button>
+            <div id="intermediateProgram" style="display:none;">
+                <h2>Курс для среднего уровня — 4 недели:</h2>
+                <ul>
+                    <li>Понедельник: 45 минут плавания + улучшение техники</li>
+                    <li>Вторник: 60 минут кардио + растяжка</li>
+                    <li>Среда: 75 минут плавания + дыхание + техника спины</li>
+                    <li>Четверг: 45 минут плавания + интервальные тренировки</li>
+                    <li>Пятница: 60 минут кардио + растяжка</li>
+                    <li>Суббота: 75 минут плавания + техника + сплит по времени</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="button" onclick="toggleSubmenu('advanced')">Курсы для продвинутых</button>
+        <div class="submenu" id="advanced">
+            <button class="button" onclick="startAdvancedCourse()">Курс для продвинутых</button>
+            <div id="advancedProgram" style="display:none;">
+                <h2>Курс для продвинутых — 4 недели:</h2>
+                <ul>
+                    <li>Понедельник: 60 минут плавания + интервальные тренировки</li>
+                    <li>Вторник: 90 минут кардио + растяжка</li>
+                    <li>Среда: 100 минут плавания + дыхание + сплит тренировки</li>
+                    <li>Четверг: 60 минут плавания + интервальные тренировки</li>
+                    <li>Пятница: 90 минут кардио + растяжка</li>
+                    <li>Суббота: 100 минут плавания + техника + анализ результатов</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="button" onclick="showRanking()">Рейтинг спортсменов</button>
+        <div class="profile-section">
+            <h2>Мой профиль</h2>
+            <p id="profileInfo">Ваши данные:</p>
+            <button class="button" onclick="authenticate()">Авторизация</button>
+        </div>
+
+        <div id="ranking" style="display:none;">
+            <h2>Рейтинг спортсменов:</h2>
+            <table class="rating-table">
+                <tr>
+                    <th>Имя</th>
+                    <th>Прогресс</th>
+                    <th>Рейтинг</th>
+                </tr>
+                <tr>
+                    <td>Иван</td>
+                    <td>90%</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>Мария</td>
+                    <td>85%</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>Петр</td>
+                    <td>80%</td>
+                    <td>3</td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <script>
-        function startGame() {
-            alert('Игра началась!');
-            // Здесь код для игры
+        function toggleSubmenu(menuId) {
+            var submenu = document.getElementById(menuId);
+            submenu.style.display = submenu.style.display === "none" || submenu.style.display === "" ? "flex" : "none";
+        }
+
+        function startTrial() {
+            document.getElementById("trialProgram").style.display = "block";
+        }
+
+        function startBeginnerCourse() {
+            document.getElementById("beginnerProgram").style.display = "block";
+        }
+
+        function startIntermediateCourse() {
+            document.getElementById("intermediateProgram").style.display = "block";
+        }
+
+        function startAdvancedCourse() {
+            document.getElementById("advancedProgram").style.display = "block";
+        }
+
+        function showRanking() {
+            document.getElementById("ranking").style.display = "block";
+        }
+
+        function authenticate() {
+            alert("Авторизация в Telegram...");
+            // Здесь будет код авторизации через Telegram API
         }
     </script>
 </body>
